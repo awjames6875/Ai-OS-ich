@@ -73,7 +73,13 @@ Sub-routing:
 ### Marketing Tasks → /marketing/
 Triggers: marketing, copywriting, seo, ads,
           conversion, funnel, email campaign,
-          corey haines
+          corey haines, content, hooks, script,
+          viral, competitors, goviralbro
+
+Sub-routing:
+- Content research + hooks → /goviralbro/
+- Content production rules → /marketing/CONTEXT.md
+- Scripts + written content → DraftLoop (Cowork)
 
 ## GLOBAL RULES (Apply Everywhere)
 
@@ -134,6 +140,9 @@ Sonnet — switch automatically when:
 - Content and video scripts
 - Anything requiring judgment calls
 
+
+
+
 CONTEXT LIMIT RULE:
 If conversation exceeds 80% context window
 → summarize to /decisions/[business]-decisions.jsonl
@@ -156,3 +165,39 @@ Before writing any code in any room, split the work into 3 layers:
 1. Which steps here are just math or data fetching? → Script
 2. What data needs to be stored and queried? → Database
 3. What requires real judgment or Adam's voice? → Claude
+
+
+## BUILD RULES — Claude Always Follows These
+
+### The Wiring Rule
+Any time a new tool, room, skill, or folder is added
+to adam-ai-os — update root CLAUDE.md routing table
+in the same session. Never defer to next session.
+
+### The Completion Checklist
+When any build task finishes, ask:
+1. Is this wired into CLAUDE.md routing? 
+2. Does the right CONTEXT.md reference it?
+3. Is it committed to GitHub?
+If any answer is NO — fix it before moving on.
+
+
+## ADAM'S BUILD STANDARDS
+
+### One Job Rule
+Each room does ONE thing only.
+/ich/pricing/ handles pricing. Nothing else.
+If a CONTEXT.md is trying to do two things — split it.
+
+### Don't Reinvent Rule  
+Before building any new room or skill — check:
+1. Does this already exist in adam-ai-os/?
+2. Does this already exist on GitHub?
+3. Can an existing room handle this with a small edit?
+If yes to any — use what exists. Don't build new.
+
+### Plan First Rule
+Before writing any CONTEXT.md — write 3 sentences
+describing what this room does, what it takes in,
+and what it produces. If you can't do that clearly,
+the room isn't ready to be built yet.
