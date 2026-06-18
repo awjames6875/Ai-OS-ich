@@ -1,0 +1,76 @@
+{
+  "properties": {
+    "1307 Indianapolis Ave": {
+      "nickname": "1307",
+      "bedrooms": 2,
+      "base_rate": 110,
+      "floor_rate": 85,
+      "str_active": true
+    },
+    "3701 S Richmond Ave": {
+      "nickname": "SOU3701",
+      "bedrooms": 3,
+      "base_rate": 124,
+      "floor_rate": 105,
+      "str_active": true
+    },
+    "4518 S Quaker Ave": {
+      "nickname": "SOU4518",
+      "bedrooms": 3,
+      "base_rate": 110,
+      "floor_rate": 90,
+      "str_active": true
+    },
+    "1432 E 38th St": {
+      "nickname": "1432",
+      "bedrooms": 2,
+      "base_rate": 60,
+      "floor_rate": 60,
+      "str_active": true
+    },
+    "4016 E 51st St": {
+      "nickname": "4016",
+      "bedrooms": 4,
+      "bathrooms": 2,
+      "base_rate": 97,
+      "floor_rate": 105,
+      "str_active": true,
+      "note": "CORRECTED 2026-06-18: was wrongly logged as 3BR, actually 4BR/2BA. base_rate $97 and floor $105 both look underpriced for a 4BR AND floor still sits above base — Adam to review base/floor. Recommendations price off Wheelhouse live data, not these values (see Hard Rule #4)."
+    },
+    "6308 E 1st Pl": {
+      "nickname": "SOU6308",
+      "bedrooms": 3,
+      "base_rate": 142,
+      "floor_rate": 142,
+      "str_active": true
+    },
+    "1348 S Pittsburg Ave": {
+      "nickname": "1348",
+      "bedrooms": 2,
+      "base_rate": 115,
+      "floor_rate": 105,
+      "str_active": true
+    },
+    "1506 S Florence Pl": {
+      "nickname": "1506",
+      "bedrooms": 4,
+      "base_rate": 205,
+      "floor_rate": 175,
+      "str_active": true
+    },
+    "2631 E 10th St": {
+      "nickname": "E10th",
+      "bedrooms": 2,
+      "base_rate": null,
+      "floor_rate": null,
+      "str_active": false,
+      "note": "long-term only — do not apply STR pricing"
+    }
+  },
+  "mode_rules": {
+    "midterm_hold_increase_pct": 37,
+    "gap_fill_threshold_pct": 30,
+    "healthy_threshold_pct": 70,
+    "emergency_days_out": 7
+  }
+}

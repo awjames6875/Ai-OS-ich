@@ -66,16 +66,13 @@ adam-ai-os/
 │   ├── content/              # Scripts and posts
 │   ├── reputation/           # Reputation management
 │   └── memoir/               # Memoir writing
-├── 4_growthgenix/            # GrowthGenix agency
-│   ├── client-intake/
-│   ├── proposals/
-│   └── content/
+├── 4_growthgenix/            # GrowthGenix agency — PLANNED, NOT BUILT
 ├── marketing/                # Marketing/copywriting work
 ├── goviralbro/              # Social media coaching system (see below)
 ├── references/              # Shared knowledge base
 │   ├── property-list.md     # All 9 ICH properties
-│   ├── guesty-api.md        # Calendar API docs
-│   └── wheelhouse-api.md    # Pricing API docs
+│   ├── build-rules.md       # 60-30-10 build patterns
+│   └── model-rules.md       # Model selection rules
 └── decisions/               # Decision logs (JSONL format)
 ```
 
@@ -109,10 +106,7 @@ Identify task type first, then load the appropriate Level 2 CONTEXT.md.
 ### GrowthGenix Tasks → 4_growthgenix/
 **Triggers:** growthgenix, client, agency, proposal, automation, install, setup, tax prep, grynd house, deandre
 
-**Sub-routing:**
-- Client intake → `4_growthgenix/client-intake/CONTEXT.md`
-- Proposals → `4_growthgenix/proposals/CONTEXT.md`
-- Content → `4_growthgenix/content/CONTEXT.md`
+**PLANNED — NOT BUILT.** Load `4_growthgenix/CONTEXT.md` for current status.
 
 ### Personal Brand Tasks → 3_adam-personal/
 **Triggers:** adamspeakslife, memoir, identity theft, reputation, google, content, video, script, post, instagram, tiktok, show your work, podcast
@@ -148,11 +142,12 @@ DISCOVER → ANGLE → SCRIPT → POST → ANALYZE
 ```
 
 ### Key Components
-- **Agent brain:** `goviralbro/data/agent-brain.json` (evolving system memory)
-- **Recon module:** Python competitor analysis (`goviralbro/recon/`)
-- **Scoring engine:** Topic scoring (`goviralbro/scoring/`)
-- **Skills:** Bundled discovery skills (`goviralbro/skills/`)
-- **Schemas:** JSON Schema contracts (`goviralbro/schemas/`)
+- **Agent brain:** `goviralbro/data/agent-brain.json` (NOT YET BUILT — planned memory file)
+- **Recon module:** Python competitor analysis (`goviralbro/recon/`) ✅
+- **Scoring engine:** Topic scoring (`goviralbro/scoring/`) ✅
+- **Skills:** Bundled discovery skills (`goviralbro/skills/`) ✅
+- **Schemas:** JSON Schema contracts (`goviralbro/schemas/`) ✅
+- **CTA templates:** `goviralbro/data/cta-templates.json` ✅
 
 ### Python Environment
 ```bash
@@ -196,7 +191,7 @@ Dependencies: Flask, yt-dlp, reportlab, google-api-python-client, python-dotenv
 ## CONTENT MOMENT RULE
 
 When Adam builds, breaks, fixes, or ships something real — stop and say **CONTENT MOMENT** then run:
-`/adam-personal/content/skills/show-your-work.md`
+`/3_adam-personal/content/skills/show-your-work.md` (NOT YET BUILT)
 
 ---
 
@@ -212,12 +207,12 @@ Read the last 50 lines at session start for context continuity.
 ## REFERENCES
 
 Shared knowledge lives in `/references/`:
-- `property-list.md` — all 9 ICH properties
-- `wheelhouse-api.md` — pricing API docs
-- `guesty-api.md` — calendar API docs
-- `avail-process.md` — lease workflow
-- `build-rules.md` — build patterns
-- `model-rules.md` — model selection
+- `property-list.md` — all 9 ICH properties ✅
+- `build-rules.md` — 60-30-10 build patterns ✅
+- `model-rules.md` — model selection rules ✅
+- `guesty-api.md` — calendar API docs (NOT YET BUILT)
+- `wheelhouse-api.md` — RM API docs: endpoints, property→ID map, ICH rules ✅
+- `avail-process.md` — lease workflow (NOT YET BUILT)
 
 ---
 
@@ -259,3 +254,9 @@ Before building any skill or CONTEXT.md, ask:
 1. Which steps here are just math or data fetching? → Script
 2. What data needs to be stored and queried? → Database
 3. What requires real judgment or Adam's voice? → Claude
+
+## Safe Harbor Reddit Campaign
+
+| Task | Go to | Read |
+|------|-------|------|
+| Sort or triage Reddit posts for Safe Harbor campaign | C:\Users\1alph\.claude\skills\safeharbor-reddit-triage | SKILL.md |

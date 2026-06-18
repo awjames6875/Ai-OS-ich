@@ -1,0 +1,7 @@
+{"date":"2026-06-18","property":"SOU6308","decision":"long_term_only","detail":"HOA requires 31+ day stays. Remove from STR gap-fill sweep. No nightly drop.","by":"Adam"}
+{"date":"2026-06-18","property":"SOU3701","decision":"no_action","detail":"Booked through end of July. 0 available nights is correct, not a stale block. Flag cleared.","by":"Adam"}
+{"date":"2026-06-18","property":"4016","decision":"approved_drop","detail":"Summer, asking $129 too high. Adam approved dropping rate to get it open.","by":"Adam"}
+{"date":"2026-06-18","property":"1307","decision":"approved_gap_fill","detail":"Adam YES to gap-fill discount on open non-event nights (protect Jun 19-20 / Jul event rates).","by":"Adam"}
+{"date":"2026-06-18","property":"4016","decision":"rate_change_executed","detail":"Set fixed $117/night 2026-06-18 to 2026-07-02 (soft summer nights, get-it-open). Verified live. July event bumps left intact (Jul 3 $136 auto). Wheelhouse base now $113, market rec $103-113 for 4BR/2BA — prices.json $97 was stale.","by":"Adam approved"}
+{"date":"2026-06-18","property":"1307","decision":"rate_change_executed","detail":"Set fixed $140 on Jul 11 and Jul 18 (BOK Center concert dates, comp local_demand +16-18, previously unpriced). Verified live.","by":"Adam approved"}
+{"date":"2026-06-18","property":"1348,1432","decision":"long_term_exclude","detail":"Both confirmed long-term rentals. Exclude from STR event pricing. Explains corrupted Wheelhouse base recs ($72/$21 from historical anchoring).","by":"Adam"}
