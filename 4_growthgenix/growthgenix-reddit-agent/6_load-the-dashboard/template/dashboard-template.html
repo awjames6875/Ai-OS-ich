@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Today's Reddit Helper · Safe Harbor</title>
+<style>
+  :root {
+    --navy: #1E3A5F; --teal: #2A7A6E; --cream: #F5F1E8; --cream-dark: #EDE8DB;
+    --green: #2E9E5B; --green-dark: #25814a; --gray: #6b7280; --border: #ddd6c8; --done: #E8F5EE;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--cream); color: #1a1a1a; font-size: 18px; line-height: 1.5; padding-bottom: 60px; }
+  .topbar { background: var(--navy); color: white; padding: 20px 24px; text-align: center; }
+  .topbar .logo { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .topbar .logo span { width: 34px; height: 34px; background: var(--teal); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; }
+  .topbar h1 { font-size: 26px; font-weight: 800; }
+  .topbar .date { opacity: 0.7; font-size: 15px; margin-top: 2px; }
+  .explainer { background: #FFFBEB; border-bottom: 1px solid #FDE68A; padding: 12px 24px; text-align: center; font-size: 15px; color: #78350F; }
+  .status { max-width: 760px; margin: 24px auto 0; padding: 0 20px; }
+  .status-card { background: white; border-radius: 16px; padding: 24px; text-align: center; box-shadow: 0 3px 14px rgba(30,58,95,0.10); border: 1px solid var(--border); }
+  .status-big { font-size: 30px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+  .status-big .num { color: var(--teal); }
+  .progress-track { height: 16px; background: var(--cream-dark); border-radius: 10px; overflow: hidden; margin-top: 14px; }
+  .progress-fill { height: 100%; background: var(--green); width: 0%; border-radius: 10px; transition: width 0.4s ease; }
+  .progress-text { font-size: 15px; color: var(--gray); margin-top: 8px; }
+  .steps { max-width: 760px; margin: 20px auto 0; padding: 0 20px; display: flex; gap: 10px; }
+  .step { flex: 1; background: white; border: 1px solid var(--border); border-radius: 12px; padding: 12px 10px; text-align: center; font-size: 13px; color: var(--gray); }
+  .step b { display: block; font-size: 22px; color: var(--teal); margin-bottom: 2px; }
+  .list { max-width: 760px; margin: 24px auto 0; padding: 0 20px; }
+  .section-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); margin: 8px 4px 14px; }
+  .card { background: white; border-radius: 16px; box-shadow: 0 3px 14px rgba(30,58,95,0.08); border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
+  .card.done { background: var(--done); border-color: #BFE6CE; }
+  .card-head { padding: 18px 20px; display: flex; gap: 16px; align-items: center; cursor: pointer; }
+  .num-badge { width: 44px; height: 44px; background: var(--navy); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; flex-shrink: 0; }
+  .card.done .num-badge { background: var(--green); }
+  .card-info { flex: 1; min-width: 0; }
+  .card-who { font-size: 14px; color: var(--teal); font-weight: 700; margin-bottom: 3px; }
+  .card-summary { font-size: 17px; color: #1a1a1a; font-weight: 600; line-height: 1.4; }
+  .card-preview { font-size: 14px; color: var(--gray); margin-top: 6px; line-height: 1.45; font-style: italic; }
+  .card-tag { display: inline-block; margin-top: 6px; font-size: 13px; background: var(--cream-dark); color: var(--navy); padding: 2px 10px; border-radius: 20px; }
+  .card-tag.funnel { background: var(--navy); color: #fff; margin-left: 6px; }
+  .open-arrow { font-size: 22px; color: #bbb; flex-shrink: 0; }
+  .done-check { font-size: 15px; font-weight: 700; color: var(--green-dark); flex-shrink: 0; }
+  .panel { display: none; border-top: 2px dashed var(--border); padding: 20px; }
+  .panel.open { display: block; }
+  .rule-line { background: #EFF7F5; border: 1px solid #BfE0DA; color: #1d5249; border-radius: 10px; padding: 10px 14px; font-size: 15px; margin-bottom: 14px; font-weight: 600; }
+  .rule-line.warn { background: #FFF7ED; border-color: #FED7AA; color: #9A3412; }
+  .fact-line { background: #EFF4FF; border: 1px solid #C5D8FB; color: #1c3f8f; border-radius: 10px; padding: 12px 14px; font-size: 15px; margin-bottom: 14px; line-height: 1.5; }
+  .fact-line b { display: block; margin-bottom: 3px; }
+  .label-small { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray); margin-bottom: 8px; }
+  .draft-box { background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 18px; font-size: 17px; line-height: 1.7; white-space: pre-wrap; margin-bottom: 18px; }
+  .draft-box:focus { outline: 3px solid var(--teal); }
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .big-btn { flex: 1; min-width: 150px; padding: 16px; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+  .btn-copy { background: var(--teal); color: white; } .btn-copy:hover { background: #235f55; }
+  .btn-go { background: #FF4500; color: white; } .btn-go:hover { background: #e03d00; }
+  .btn-done { background: var(--green); color: white; } .btn-done:hover { background: var(--green-dark); }
+  .btn-edit { background: white; color: var(--gray); border: 2px solid var(--border); flex: 0 0 auto; min-width: 0; padding: 16px 18px; }
+  .all-done { max-width: 760px; margin: 30px auto; padding: 30px 20px; text-align: center; background: var(--done); border: 2px solid #BFE6CE; border-radius: 16px; display: none; }
+  .all-done.show { display: block; }
+  .all-done .big { font-size: 26px; font-weight: 800; color: var(--green-dark); }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--navy); color: white; padding: 16px 28px; border-radius: 12px; font-size: 17px; font-weight: 700; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 99; box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .no-data { max-width: 760px; margin: 40px auto; padding: 40px 24px; text-align: center; background: white; border: 1px solid var(--border); border-radius: 16px; color: var(--gray); }
+  @media (max-width: 560px) { .steps { flex-wrap: wrap; } .step { flex: 1 1 40%; } }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo"><span>SH</span></div>
+  <h1>Today's Reddit Helper</h1>
+  <div class="date" id="run-date">Loading…</div>
+</div>
+<div class="explainer">
+  This page shows the Reddit posts to help with today. Open each one, copy the words, post it on Reddit, then tap "I posted it."
+</div>
+<div class="status">
+  <div class="status-card">
+    <div class="status-big">You have <span class="num" id="ready-count">0</span> to post today</div>
+    <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+    <div class="progress-text"><span id="done-count">0</span> of <span id="total-count">0</span> done</div>
+  </div>
+</div>
+<div class="steps">
+  <div class="step"><b>1</b>Open a post</div>
+  <div class="step"><b>2</b>Copy the words</div>
+  <div class="step"><b>3</b>Go to Reddit</div>
+  <div class="step"><b>4</b>Mark it done</div>
+</div>
+<div class="list" id="list"></div>
+<div class="all-done" id="alldone">
+  <div class="big">All done for today!</div>
+  <p style="margin-top:8px; color:#25814a;">You posted everything. Great work. Come back tomorrow for the next batch.</p>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+/*__REDDIT_DATA__*/
+</script>
+<script>
+  let total = 0, done = 0;
+  const doneSet = new Set();
+  function render() {
+    const list = document.getElementById('list');
+    if (typeof window.REDDIT_DATA === 'undefined' || !window.REDDIT_DATA || !window.REDDIT_DATA.posts) {
+      list.innerHTML = '<div class="no-data"><h2 style="color:#1E3A5F;margin-bottom:10px;">No posts loaded yet</h2><p>Run the Reddit skill in Cowork to fill in today\'s posts.</p></div>';
+      document.getElementById('run-date').textContent = 'No data yet';
+      return;
+    }
+    const data = window.REDDIT_DATA;
+    document.getElementById('run-date').textContent = data.date || '';
+    const posts = data.posts;
+    total = posts.length;
+    document.getElementById('total-count').textContent = total;
+    document.getElementById('ready-count').textContent = total;
+    let priorityShown = false, regularShown = false;
+    let html = '';
+    posts.forEach((p, i) => {
+      if (p.priority && !priorityShown) { html += '<div class="section-label">Most important — do these first</div>'; priorityShown = true; }
+      if (!p.priority && !regularShown) { html += '<div class="section-label">Also good to do</div>'; regularShown = true; }
+      const ruleClass = p.ruleType === 'tooyoung' ? 'rule-line warn' : 'rule-line';
+      const factBlock = p.fact ? '<div class="fact-line"><b>Real fact you can use (we checked — it\'s true):</b>' + p.fact + '</div>' : '';
+      const funnelBadge = p.funnel ? ' <span class="card-tag funnel">' + p.funnel + '</span>' : '';
+      const f = p.format;
+      const formatBadge = f ? ' <span class="card-tag">' + [f.tone, f.length_band + ' (~' + f.avg_words + ' words)', f.structure, (f.links_present ? 'links ok' : 'no links in thread')].join(' · ') + '</span>' : '';
+      const preview = (p.draft || '').slice(0, 130);
+      html += '<div class="card" id="card-' + i + '">' +
+        '<div class="card-head" onclick="openCard(' + i + ')">' +
+          '<div class="num-badge" id="num-' + i + '">' + (i+1) + '</div>' +
+          '<div class="card-info">' +
+            '<div class="card-who">' + p.who + '</div>' +
+            '<div class="card-summary">' + p.summary + '</div>' +
+            '<div class="card-preview">&ldquo;' + preview + '&hellip;&rdquo; &nbsp;<b style="color:var(--teal);font-style:normal;">tap to open</b></div>' +
+            '<span class="card-tag">' + p.tag + '</span>' + funnelBadge + formatBadge +
+          '</div>' +
+          '<div class="open-arrow" id="arrow-' + i + '">&#9660;</div>' +
+        '</div>' +
+        '<div class="panel" id="panel-' + i + '">' +
+          '<div class="' + ruleClass + '">' + p.rule + '</div>' +
+          factBlock +
+          '<div class="label-small">The words to post (tap to change anything)</div>' +
+          '<div class="draft-box" contenteditable="true" id="text-' + i + '">' + p.draft + '</div>' +
+          '<div class="btn-row">' +
+            '<button class="big-btn btn-copy" onclick="copyText(' + i + ')">Copy the words</button>' +
+            '<a class="big-btn btn-go" href="' + p.redditUrl + '" target="_blank">Go to Reddit</a>' +
+            '<button class="big-btn btn-edit" onclick="editText(' + i + ')">Edit</button>' +
+            '<button class="big-btn btn-done" onclick="markDone(' + i + ')">I posted it</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    });
+    list.innerHTML = html;
+    if (posts.length > 0) { openCard(0); }
+  }
+  function openCard(i) {
+    const panel = document.getElementById('panel-' + i);
+    const arrow = document.getElementById('arrow-' + i);
+    const isOpen = panel.classList.contains('open');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.open-arrow').forEach(a => a.innerHTML = '&#9660;');
+    if (!isOpen) { panel.classList.add('open'); if(arrow) arrow.innerHTML = '&#9650;'; }
+  }
+  function copyText(i) {
+    const t = document.getElementById('text-' + i).innerText;
+    const ok = () => toast('Copied! Now tap "Go to Reddit"');
+    const fallback = () => {
+      const ta = document.createElement('textarea');
+      ta.value = t;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (e) { copied = false; }
+      document.body.removeChild(ta);
+      if (copied) { ok(); }
+      else {
+        const box = document.getElementById('text-' + i);
+        const range = document.createRange();
+        range.selectNodeContents(box);
+        const sel = window.getSelection();
+        sel.removeAllRanges(); sel.addRange(range);
+        toast('Press Ctrl+C (or Cmd+C) to copy — text is selected');
+      }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(ok).catch(fallback);
+    } else {
+      fallback();
+    }
+  }
+  function editText(i) { document.getElementById('text-' + i).focus(); toast('You can type in the box now'); }
+  function markDone(i) {
+    if (doneSet.has(i)) return;
+    doneSet.add(i); done++;
+    const card = document.getElementById('card-' + i);
+    card.classList.add('done');
+    const arrow = document.getElementById('arrow-' + i);
+    if (arrow) arrow.outerHTML = '<div class="done-check">Done</div>';
+    document.getElementById('panel-' + i).classList.remove('open');
+    const pct = Math.round((done/total)*100);
+    document.getElementById('progress').style.width = pct + '%';
+    document.getElementById('done-count').textContent = done;
+    document.getElementById('ready-count').textContent = total - done;
+    if (done === total) document.getElementById('alldone').classList.add('show');
+    toast('Marked as done — nice work!');
+  }
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
+  }
+  render();
+</script>
+</body>
+</html>
