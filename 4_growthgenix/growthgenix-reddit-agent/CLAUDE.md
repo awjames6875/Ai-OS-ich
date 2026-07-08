@@ -34,6 +34,8 @@ Adam has ADHD. ALWAYS:
 | Write + publish blog posts (monthly) | /8_write-the-blogs | CONTEXT.md |
 | Check if AI engines cite the client (monthly) | /9_check-the-citations | CONTEXT.md |
 | Draft original posts (monthly) | /10_write-original-posts | CONTEXT.md |
+| Make a video episode from a blog | /11_make-the-episode | CONTEXT.md |
+| Cut shorts from an episode | /12_cut-the-shorts | CONTEXT.md |
 | Build the Mission Control scoreboard | /6_load-the-dashboard | code/write_tracker.py |
 | Update the question bank | /content | code/build_question_bank.py |
 | Change which business this serves | /config | client-config.md |
@@ -65,6 +67,17 @@ real questions — keepers.json is overwritten daily) and after Room 6:
 - Room 9 → citation check: script builds the top-20 query checklist, Adam runs them through
   ChatGPT/Perplexity/Claude BY HAND, script logs results to citation-log.json
 - Room 10 → 2–4 original posts, ALWAYS disclosed, human posts by hand
+
+## Video Lane (per published blog, not daily)
+- Room 11 → episode: `pick_episode_topic.py` picks the next published blog + lane
+  (avatar ~70% HeyGen / real ~30% Adam on camera), AI writes the 2–3 min narration
+  script, ADAM approves, render + package locally, `log_episode.py <slug>` tracks it.
+  HARD GATE: no paid API call (HeyGen/ElevenLabs) without Adam's explicit approval —
+  ask first, every time.
+- Room 12 → shorts: in-house clipper, 100% local and free — `cut_shorts.py <slug>`
+  (Whisper transcribes, [CLIP] markers from the Room 11 script pick the moments,
+  ffmpeg cuts + crops to 9:16), then embedded-captions styles each short, AI titles
+  them, ADAM watches and posts by hand, `log_shorts.py <slug>` closes the batch.
 
 ## Critical Rules (Apply Everywhere)
 1. Never commit secrets — keep API keys in `.env.local` (gitignored)

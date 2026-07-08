@@ -1,64 +1,65 @@
-# HANDOFF — Session Briefing (written July 7, 2026, late night)
+# HANDOFF — Session Briefing (written July 8, 2026, late night)
 
 Read this first next session. Pipeline root:
 `4_growthgenix/growthgenix-reddit-agent/` (client #1 = Safe Harbor Behavioral Health)
 
-## 1. WHAT GOT DONE (July 7)
+## 1. WHAT GOT DONE (July 7-8 overnight — Day 2, video lane)
 
-- **Duplicate cleanup** — accidental nested copy at
-  `4_growthgenix/growthgenix-reddit-agent/4_growthgenix/...` diffed, confirmed, deleted.
-  No hardcoded paths pointed at it.
-- **Format matching** — new Room 2.5 script `2_sort-the-keepers/code/fetch_thread_style.py`:
-  second Apify pass (same actor, verified comment support) fetches top 5 comments for the
-  top-15 keepers (priority first, then score — cost cap ~$0.11/run). Builds a style profile
-  (avg words, length band, structure, links, tone) per thread, writes `format` into
-  keepers.json. Dashboard cards show a style badge. SKILL.md Step 5.5 +
-  `references/format-style-profile.md` document it. Rule: format changes the CONTAINER,
-  never the content (honesty lock, 4 gates, 9:1, brand language untouched).
-- **publish_blog.py safety gates** — (a) type-the-slug confirmation before clone/push,
-  anything else aborts; (b) `--preview` flag runs every check + prints the exact post
-  object, never commits/pushes; (c) claude-mem's CLAUDE.md excluded from pending list.
-  All smoke-tested.
-- **Skills re-zipped + uploaded** — both zips rebuilt with Python zipfile (forward-slash
-  paths; PowerShell Compress-Archive backslashes had broken claude.ai upload). Both live
-  on claude.ai as of 7/7/26: safeharbor-reddit-triage + adam-story-blog-engine.
-- **Committed + pushed** — `4099438` on origin/master: all 10 rooms, format matching,
-  publish gates, HANDOFF.md (81 files; .env.local stayed gitignored).
-- **NOT done (see Open Items):** blog sandwich AEO upgrade.
+- **Environment verified** — Node v22.17.0, FFmpeg installed.
+- **HyperFrames installed** — `npx skills add heygen-com/hyperframes --all` (20 skills:
+  hyperframes core/CLI/animation, embedded-captions, media-use, etc.).
+- **Room 11_make-the-episode built + smoke-tested** — turns a published blog into a
+  2-3 min episode. Decisions locked with Adam: source = published blogs (they trace to
+  real Reddit questions), lane split = HeyGen avatar ~70% / real Adam on camera ~30%
+  (picker suggests real every 3rd episode), length 2-3 min. `pick_episode_topic.py`
+  queues the next unused blog; `log_episode.py` prevents repeats;
+  `skills/episode-format.md` = the spoken blog sandwich (answer in first 30s for AEO,
+  [CLIP] markers for Room 12). Bug fixed: claude-mem's CLAUDE.md stub in content/blog/
+  counted as a published post (excluded by name — same fix publish_blog.py got).
+- **Render pipe PROVEN, $0** — hyperframes 0.7.42, lint/validate 0 errors, 10s MP4
+  rendered locally in 23s: `11_make-the-episode/output/pipe-test.mp4`. Adam watched it.
+- **Room 12_cut-the-shorts built + tested — IN-HOUSE clipper** (Adam reversed the
+  earlier "OpusClip now" call mid-build; no subscription, sellable GrowthGenix asset).
+  `cut_shorts.py <slug>`: local Whisper transcript -> matches the Room 11 script's
+  [CLIP] paragraphs to word timestamps (refuses to guess under 60% overlap) -> ffmpeg
+  cut + center-crop to 1080x1920 -> manifest.json. Then: "caption the shorts"
+  (embedded-captions, anchor default, verbatim only) -> "title the shorts" (AI,
+  question-first titles) -> ADAM posts by hand -> `log_shorts.py <slug>`.
+  Verified end-to-end on fixtures (match, no-match, band warning, true 9:16 output).
+- **Routing updated** — master CLAUDE.md has rows for Rooms 11+12 and a Video Lane
+  section. Full detail: `tasks/todo.md` (Day 2 checklist + review).
 
-## 2. CURRENT STATE — The 10 Rooms
+## 2. CURRENT STATE — The 12 Rooms
+
+Rooms 1-10 unchanged (daily Reddit pipeline + monthly blogs/citations/originals).
+New video lane, per published blog:
 
 | Room | Does |
 |---|---|
-| 1_find-the-posts | Python scrapes Reddit via Apify (fatihtahta actor), saves raw-posts.json |
-| 2_sort-the-keepers | Python sorts keep/skip → keepers.json; then fetch_thread_style.py adds format profiles (top 15) |
-| 3_find-the-proof | AI researches ONE real citation per keeper (never fabricated) |
-| 4_write-the-draft | AI writes first draft matching thread's format profile |
-| 5_make-it-sound-like-me | AI voice-clone pass (must not inflate short casual replies) |
-| 6_load-the-dashboard | Python writes dashboard data.js + write_tracker.py scoreboard |
-| 7_review-and-post | HUMAN reviews dashboard, posts by hand — never automated |
-| 8_write-the-blogs | Monthly: blog engine drafts to pending/, publish_blog.py pushes ONE approved post (slug confirm / --preview) |
-| 9_check-the-citations | Monthly: builds top-20 query checklist, Adam runs by hand, logs results |
-| 10_write-original-posts | Monthly: 2–4 disclosed original posts, human posts by hand |
+| 11_make-the-episode | Blog -> 2-3 min episode script (Adam's voice) -> avatar (HeyGen, PAID-gated) or real-Adam render -> local captions/packaging |
+| 12_cut-the-shorts | Episode -> 3-5 vertical shorts: Whisper + [CLIP] match + ffmpeg (all local, $0) -> embedded-captions -> AI titles -> human posts |
 
-## 3. NEXT UP — Day 2 Plan (video lane)
+## 3. NEXT UP — First real episode (episode #1 already queued)
 
-1. Verify Node 22+ and FFmpeg installed
-2. `npx skills add heygen-com/hyperframes --all`
-3. Build Room **11_make-the-episode**
-4. 15-second test render (prove the pipe works before anything bigger)
-5. Build Room **12_cut-the-shorts** — two lanes:
-   - Avatar lane = HeyGen
-   - Auto lane = ElevenLabs + HiggsField + HyperFrames render
+1. Queue is loaded: `young-child-meltdowns-aggression-shame`, avatar lane
+   (`11_make-the-episode/output/episode-queue.json`)
+2. Say **"write the episode"** — drafts the script (free; VOICE_DNA.md first)
+3. HeyGen avatar setup + **Adam's explicit approval before the first paid render**
+4. First real run also proves: Whisper on real speech, embedded-captions on a real
+   short (both untested on real audio — fixtures only so far)
 
-**HARD GATE: no paid API calls without Adam's explicit approval. Ask first, every time.**
+**HARD GATE: no paid API calls (HeyGen/ElevenLabs/Apify) without Adam's explicit
+approval. Ask first, every time.**
 
 ## 4. OPEN ITEMS
 
-- **Blog sandwich AEO upgrade** — offered, not built: FAQ blocks, answer-first sections,
-  schema-friendly headings for the blog engine (70% machine-readability target).
-  Adam says the word when he wants it.
-- Live slug-confirmation prompt untested with a real draft — will be exercised on the
-  next real publish (`--preview` first is the safe habit).
-- Intermittent Claude Code classifier outage tonight blocked shell/browser tools;
-  workaround: Adam runs commands via `!` prefix. May recur.
+- HeyGen avatar of Adam: not yet created/configured — blocker for the avatar lane.
+- Blog sandwich AEO upgrade (FAQ blocks, answer-first sections) — still offered, not
+  built. Adam says the word.
+- Live slug-confirmation prompt in publish_blog.py still untested with a real draft
+  (`--preview` first is the safe habit).
+- Room 11/12 output folders (episodes, shorts, scripts, queues) stay LOCAL — the
+  pipeline's own .gitignore already excludes every room's output/ directory.
+- claude-mem keeps spraying stub CLAUDE.md files at junk paths (nested
+  4_growthgenix/..., a literal `~/` folder) when scripts run from inside room dirs —
+  cleaned twice now (July 7 + 8). Check for them before every commit.
