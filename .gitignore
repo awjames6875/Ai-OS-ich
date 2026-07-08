@@ -10,3 +10,8 @@ __pycache__/
 # OS junk
 .DS_Store
 Thumbs.db
+
+# Video lane - generated media stays local (scripts/manifests/logs DO get committed)
+4_growthgenix/growthgenix-reddit-agent/11_make-the-episode/output/**/*.mp4
+4_growthgenix/growthgenix-reddit-agent/11_make-the-episode/output/*.mp4
+4_growthgenix/growthgenix-reddit-agent/12_cut-the-shorts/output/**/*.mp4

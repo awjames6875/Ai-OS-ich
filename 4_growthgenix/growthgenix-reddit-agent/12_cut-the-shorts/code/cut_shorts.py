@@ -65,6 +65,16 @@ def load_transcript_units(episode: Path) -> list:
         sidecar.write_text(result.stdout, encoding="utf-8")
 
     data = json.loads(sidecar.read_text(encoding="utf-8"))
+    # transcribe --json prints metadata pointing at the real transcript file —
+    # follow it and keep the slug-specific sidecar so episodes don't clobber
+    if isinstance(data, dict) and data.get("transcriptPath"):
+        if not data.get("ok", True):
+            sys.exit(f"Transcription reported failure: {data}")
+        real = Path(data["transcriptPath"])
+        data = json.loads(real.read_text(encoding="utf-8"))
+        sidecar.write_text(json.dumps(data), encoding="utf-8")
+        if real.name == "transcript.json":
+            real.unlink()
     for key in ("words", "segments", "transcript", "entries"):
         if isinstance(data, dict) and isinstance(data.get(key), list):
             data = data[key]

@@ -22,8 +22,13 @@ blog, and the Reddit reply all reinforce the same question. Room 12 cuts shorts 
    -> script lands in output/scripts/<slug>.md with 3-5 clip moments marked for Room 12
 3. ADAM: read the script (~3 min). Your approval = moving to render.
 4. Render the episode:
-   - Avatar lane: HeyGen render — **PAID. Adam approves before every call. No exceptions.**
-   - Real lane: Adam records himself reading the script, drops the file in output/raw/
+   - Avatar lane: `python code/render_avatar_episode.py --test` (first clip, ~30s
+     quality check), then without --test for the full episode. **PAID — the script
+     itself makes Adam type RENDER before every call. No exceptions.** Uses the
+     "Aj" avatar group + "Adam Studio voice" (his clone); `--look <id>` overrides
+     the look. HEYGEN_API_KEY lives in /.env.local (gitignored).
+   - Real lane: Adam records himself reading the script, drops the file at
+     output/episodes/<slug>.mp4
 5. Package locally (free): captions via the embedded-captions skill + ffmpeg
    -> final MP4 in output/episodes/<slug>.mp4
 6. Run `python code/log_episode.py <slug>` — appends to output/episodes-log.json so the

@@ -93,6 +93,29 @@ def main():
 
     html = TEMPLATE.read_text().replace(PLACEHOLDER, data_js)
 
+    # Self-heal (2026-07-08): the template has occasionally been read truncated (a mount
+    # sync glitch), dropping the render() call and leaving the page stuck on "Loading".
+    # If the render() call is missing, rebuild the known-good JS tail so the page works.
+    if "render();" not in html:
+        cut = html.rfind("document.getElementById('done-")
+        if cut != -1:
+            html = html[:cut]
+        html += (
+            "document.getElementById('done-count').textContent = done;\n"
+            "    document.getElementById('ready-count').textContent = total - done;\n"
+            "    if (done === total) document.getElementById('alldone').classList.add('show');\n"
+            "    toast('Marked as done — nice work!');\n"
+            "  }\n"
+            "  function toast(msg) {\n"
+            "    const t = document.getElementById('toast');\n"
+            "    t.textContent = msg; t.classList.add('show');\n"
+            "    setTimeout(() => t.classList.remove('show'), 2600);\n"
+            "  }\n"
+            "  render();\n"
+            "</script>\n</body>\n</html>\n"
+        )
+        print("Self-heal: template was truncated; rebuilt the render() tail.")
+
     OUTDIR.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(html)
     (OUTDIR / "index.html").write_text(html)  # served at the Netlify root URL
@@ -102,6 +125,23 @@ def main():
     if removed:
         print("Cleaned up old files: " + ", ".join(removed))
     print("output/ now holds only the fresh dashboard.html. Open it directly.")
+
+    # Pre-publish verification gate: never push a broken page to the live link.
+    # The page must call render(), close cleanly, and (when there are posts) contain cards.
+    problems = []
+    if "render();" not in html:
+        problems.append("missing render() call")
+    if not html.rstrip().endswith("</html>"):
+        problems.append("HTML not closed (</html> missing)")
+    if cards and 'id="card-0"' not in html:
+        problems.append("no post cards rendered into the page")
+    if "window.REDDIT_DATA" not in html:
+        problems.append("data block missing")
+
+    if problems:
+        print("PUBLISH BLOCKED - dashboard failed verification: " + "; ".join(problems))
+        print("The live link was NOT updated. Fix and re-run; nothing broken went live.")
+        return
 
     # Auto-publish to GitHub -> Netlify auto-deploys the live link.
     try:
