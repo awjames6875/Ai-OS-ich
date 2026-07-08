@@ -22,7 +22,9 @@ Read this first next session. Pipeline root:
 - **Skills re-zipped + uploaded** — both zips rebuilt with Python zipfile (forward-slash
   paths; PowerShell Compress-Archive backslashes had broken claude.ai upload). Both live
   on claude.ai as of 7/7/26: safeharbor-reddit-triage + adam-story-blog-engine.
-- **NOT done (see Open Items):** blog sandwich AEO upgrade; git commits.
+- **Committed + pushed** — `4099438` on origin/master: all 10 rooms, format matching,
+  publish gates, HANDOFF.md (81 files; .env.local stayed gitignored).
+- **NOT done (see Open Items):** blog sandwich AEO upgrade.
 
 ## 2. CURRENT STATE — The 10 Rooms
 
@@ -53,9 +55,6 @@ Read this first next session. Pipeline root:
 
 ## 4. OPEN ITEMS
 
-- **COMMIT TONIGHT'S WORK** — the entire `4_growthgenix/growthgenix-reddit-agent/` folder
-  is still UNTRACKED (last commit predates all of it). Highest priority: one crash or
-  bad delete loses everything. Commit before starting Day 2.
 - **Blog sandwich AEO upgrade** — offered, not built: FAQ blocks, answer-first sections,
   schema-friendly headings for the blog engine (70% machine-readability target).
   Adam says the word when he wants it.
